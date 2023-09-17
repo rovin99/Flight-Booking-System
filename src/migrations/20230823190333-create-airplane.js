@@ -15,11 +15,15 @@ module.exports = {
       },
       capacity: {
         type: Sequelize.INTEGER,
-        default: 0
+        allowNull: false,
+        defaultValue: 0, // Use "defaultValue" instead of "default"
+        validate: {
+          max: 1000
+        }
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DAresponse
+        type: Sequelize.DATE // Corrected data type here
       },
       updatedAt: {
         allowNull: false,
