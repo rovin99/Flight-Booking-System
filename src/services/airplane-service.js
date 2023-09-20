@@ -67,7 +67,7 @@ async function updateAirplane(id,data){
         if(error.statusCode==StatusCodes.NOT_FOUND){
             throw new AppError('The airplane you requested not found', StatusCodes.NOT_FOUND);
         }
-        throw new AppError('Cannot delete data of the airplane', StatusCodes.INTERNAL_SERVER_ERROR);
+        throw new AppError('Cannot update data of the airplane', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 }
 module.exports = {

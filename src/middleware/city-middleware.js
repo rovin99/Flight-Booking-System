@@ -3,7 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 
 const {errorResponse}=require('../utils/common');
 function validateCreateCity(req, res, next) {
-    if(!req.body.modelNumber){
+    if(!req.body.name){
         errorResponse.message='Something went wrong while creating a new City'
         errorResponse.error={
             explanation: 'name not found in the request in correct format'
