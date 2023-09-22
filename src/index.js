@@ -9,4 +9,11 @@ app.use('/api',apiRoutes);
 app.listen(ServerConfig.PORT,async()=>{
     console.log(`listening on port: ${ServerConfig.PORT}`);
     Logger.info('successfully started',"root",{msg:"something started"});
+
+    const { flights, Airplanes } = require('./models');
+
+// Find an existing airplane record by its primary key (ID)
+    const airplane = await Airplanes.findByPk(1);
+
+    
 });

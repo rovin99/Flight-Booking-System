@@ -35,11 +35,11 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
     },
     from:{
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     to:{
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     price: {
