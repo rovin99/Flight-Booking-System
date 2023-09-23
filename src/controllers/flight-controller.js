@@ -37,7 +37,7 @@ async function createFlight(req, res) {
 }
 async function getFlights(req, res) {
     try {
-        const FlightsData = await FlightService.getFlights();
+        const FlightsData = await FlightService.getFlights(req.query);
         successResponse.data=FlightsData;
         return res
                 .status(StatusCodes.OK)
