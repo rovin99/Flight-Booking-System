@@ -1,5 +1,6 @@
 const CrudRepository = require('./crud-repo');
-const { flights } = require('../models');
+const { flights,Airplanes,airport} = require('../models');
+const {Sequelize,Op}=require('sequelize');
 
 
 class FlightRepository extends CrudRepository {
@@ -7,11 +8,41 @@ class FlightRepository extends CrudRepository {
         super(flights);
     }
     async getAllFlights(filter,sortFilter){
-        const response= await flights.findAll({
-            where: filter,
-            order: sortFilter
-        });
-        return response;
+        try {
+            const response = await flights.findAll({
+              where: filter,
+              order: sortFilter,
+              include: [
+                {
+                  model: Airplanes,
+                  as: 'AirplaneDetails',
+                  required: true
+                },
+                {
+                  model: airport,
+                  required: true,
+                  as: 'DepartureAirport',
+                  on:{
+                    col1: Sequelize.where(Sequelize.col("flights.from"),"=",Sequelize.col("DepartureAirport.code"))
+                  }  
+                },
+                {
+                  model: airport,
+                  required: true,
+                  as: 'ArrivalAirport',
+                  on:{
+                    col1: Sequelize.where(Sequelize.col("flights.to"),"=",Sequelize.col("ArrivalAirport.code"))
+                  }  
+                }
+                
+              ],
+            });
+            return response;
+          } catch (error) {
+            console.error('Error fetching flights:', error);
+            throw new AppError('Cannot fetch data of all the Flights', StatusCodes.INTERNAL_SERVER_ERROR);
+          }
+          
     }
 }
 
