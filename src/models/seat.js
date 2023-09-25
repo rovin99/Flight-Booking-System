@@ -2,8 +2,10 @@
 const {
   Model
 } = require('sequelize');
+const { Enums } = require('../utils/common');
+const { BUSINESS, PREMIUM_ECONOMY, FIRST_CLASS, ECONOMY } = Enums.SEAT_TYPE;
 module.exports = (sequelize, DataTypes) => {
-  class Airplane extends Model {
+  class seat extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,38 +13,33 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.flights,{
-        foreignKey: 'airplane',
-        
-        onDelete: 'CASCADE',
-      })
-      this.hasMany(models.seat,{
+      this.belongsTo(models.Airplanes, {
         foreignKey: 'airplaneId',
-        
-        onDelete: 'CASCADE',
-      })
-
+      });
     }
   }
-  Airplane.init({
-    modelNumber: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        isAlphanumeric: true,
-      }
-    },
-    capacity: {
+  seat.init({
+    airplaneId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 0,
-      validate: {
-        max: 1000
-      }
+    },
+    col: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    row: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.ENUM,
+      values: [BUSINESS, ECONOMY, PREMIUM_ECONOMY, FIRST_CLASS],
+      allowNull: false,
+      defaultValue: 'Economy',
     }
   }, {
     sequelize,
-    modelName: 'Airplanes',
+    modelName: 'seat',
   });
-  return Airplane;
+  return seat;
 };
