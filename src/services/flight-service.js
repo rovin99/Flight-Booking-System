@@ -112,14 +112,14 @@ async function destroyFlight(id) {
         throw new AppError('Cannot delete data of the Flight', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 }
-async function updateFlight(id,data){
+async function updateSeats(data){
     try{
-        const updateResponse = await flightRepository.update(id,data);
+        const updateResponse = await flightRepository.updateSeats(data.flightId, data.seats, data.dec);
         return updateResponse;
     }
     catch(error){
         if(error.statusCode==StatusCodes.NOT_FOUND){
-            throw new AppError('The Flight you requested not found', StatusCodes.NOT_FOUND);
+            throw new AppError('The Flight did not got updated', StatusCodes.NOT_FOUND);
         }
         throw new AppError('Cannot update data of the Flight', StatusCodes.INTERNAL_SERVER_ERROR);
     }
@@ -129,5 +129,5 @@ module.exports = {
     getFlights,
     getFlight,
     destroyFlight,
-    updateFlight
+    updateSeats
 }

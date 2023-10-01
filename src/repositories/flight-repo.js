@@ -1,7 +1,7 @@
 const CrudRepository = require('./crud-repo');
 const { flights,Airplanes,airport} = require('../models');
 const {Sequelize,Op}=require('sequelize');
-
+const db=require('../models');
 
 class FlightRepository extends CrudRepository {
     constructor() {
@@ -44,6 +44,29 @@ class FlightRepository extends CrudRepository {
           }
           
     }
+    async updateSeats(flightId,seats,dec=true){
+      try{
+        await db.sequelize.query(`SELECT * FROM flights WHERE flights.id=${flightId} FOR UPDATE;`); //PUTS A ROW LOCK
+        const response= await flights.findByPk(flightId);
+        
+        if(parseInt(dec)){
+          
+          await response.decrement('totalSeats', {by: seats});
+
+        }
+        else{
+          await response.increment('totalSeats', {by: seats});
+          
+        }
+        const newresponse= await flights.findByPk(flightId);
+        return newresponse;
+      }
+      catch (error) {
+        console.error('Error updating flights:', error);
+        throw new AppError('Cannot update the Flight', StatusCodes.INTERNAL_SERVER_ERROR);
+      }
+    }
+    
 }
 
 module.exports = FlightRepository;

@@ -54,6 +54,7 @@ async function getFlights(req, res) {
 //POST: /Flights/:id
 async function getFlight(req, res) {
     try {
+        console.log(req.params.id);
         const FlightData = await FlightService.getFlight(req.params.id);
         successResponse.data=FlightData;
         return res
@@ -86,9 +87,13 @@ async function destroyFlight(req, res) {
 
 //Patch: /Flights/:id/:data
 
-async function updateFlight(req, res) {
+async function updateSeats(req, res) {
     try {
-        const updateResponse = await FlightService.updateFlight(req.params.id,req.body);
+        const updateResponse = await FlightService.updateSeats({
+            flightId: req.params.id,
+            seats: req.body.seats,
+            dec: req.body.dec
+        });
         successResponse.data=updateResponse;
         return res
                 .status(StatusCodes.OK)
@@ -108,5 +113,5 @@ module.exports = {
     getFlights,
     getFlight,
     destroyFlight,
-    updateFlight
+    updateSeats
 }
